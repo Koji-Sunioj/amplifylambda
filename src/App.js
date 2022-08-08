@@ -35,7 +35,7 @@ function App() {
 
     API.put(myAPI, path, init)
       .then((response) => {
-        console.log(response);
+        getAllItems();
       })
       .catch((error) => {
         console.log("error");

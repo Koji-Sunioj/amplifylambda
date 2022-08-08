@@ -27,7 +27,7 @@ exports.handler = async (event) => {
       await docClient
         .put({
           TableName: table,
-          Item: { name: name, description: description },
+          Item: { name: name, description: description, id: "10" },
         })
         .promise();
       return {
