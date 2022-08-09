@@ -15,7 +15,7 @@
       "function": {
         "lambda47ed18ee": {
           "deploymentBucketName": "amplify-lambda-dev-195511-deployment",
-          "s3Key": "amplify-builds/lambda47ed18ee-7736575152416a51706e-build.zip"
+          "s3Key": "amplify-builds/lambda47ed18ee-38365a686a69536c3147-build.zip"
         }
       }
     }

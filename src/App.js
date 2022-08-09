@@ -1,8 +1,10 @@
 import { API } from "aws-amplify";
 import { useEffect, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 function App() {
   const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const myAPI = "api1125d023";
@@ -12,28 +14,50 @@ function App() {
     getAllItems();
   }, []);
 
-  function getAllItems() {
-    API.get(myAPI, path)
+  async function getAllItems() {
+    await API.get(myAPI, path)
       .then((response) => {
+        response.Items.sort((first, second) => {
+          return new Date(first.createdAt) - new Date(second.createdAt);
+        });
+
         setItems(response.Items);
-        console.log(items);
+        setLoading(false);
       })
       .catch((error) => {
         console.log(error);
       });
   }
 
-  function addItem(event) {
+  async function addItem(event) {
     event.preventDefault();
     const { name, description } = event.currentTarget;
+    setName("");
+    setDescription("");
+
     const init = {
       body: {
+        id: uuidv4(),
         name: name.value,
         description: description.value,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        __typename: "Todo",
       },
     };
+    setLoading(true);
+    await API.put(myAPI, path, init)
+      .then((response) => {
+        getAllItems();
+      })
+      .catch((error) => {
+        console.log("error");
+      });
+  }
 
-    API.put(myAPI, path, init)
+  async function deleteItem(id) {
+    setLoading(true);
+    await API.del(myAPI, path, { body: { id: id } })
       .then((response) => {
         getAllItems();
       })
@@ -60,6 +84,7 @@ function App() {
           <div>
             <label>name: </label>
             <input
+              value={name}
               type="text"
               onChange={(e) => {
                 setName(e.currentTarget.value);
@@ -70,6 +95,7 @@ function App() {
           <div>
             <label>description: </label>
             <input
+              value={description}
               type="text"
               onChange={(e) => {
                 setDescription(e.currentTarget.value);
@@ -94,6 +120,14 @@ function App() {
               </strong>
               <p>{item.description}</p>
               <p>{item.createdAt}</p>
+              <button
+                onClick={() => {
+                  deleteItem(item.id);
+                }}
+                disabled={loading}
+              >
+                delete
+              </button>
             </div>
           );
         })}
