@@ -17,6 +17,9 @@
           "deploymentBucketName": "amplify-lambda-dev-195511-deployment",
           "s3Key": "amplify-builds/lambda47ed18ee-38365a686a69536c3147-build.zip"
         }
+      },
+      "auth": {
+        "lambda84326223": {}
       }
     }
   }

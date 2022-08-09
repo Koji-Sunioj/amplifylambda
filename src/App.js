@@ -1,5 +1,6 @@
-import { API } from "aws-amplify";
+import { API, Auth } from "aws-amplify";
 import { useEffect, useState, useRef } from "react";
+import { Authenticator, withAuthenticator } from "@aws-amplify/ui-react";
 import { v4 as uuidv4 } from "uuid";
 
 function App() {
@@ -84,6 +85,33 @@ function App() {
 
   return (
     <div>
+      {" "}
+      {Auth.user && (
+        <div>
+          <span
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              border: "1px solid black",
+              padding: "20px",
+              margin: "20px",
+              flex: "1",
+            }}
+          >
+            <p>
+              signed in as {Auth.user.attributes.email}{" "}
+              <button
+                className="linker"
+                onClick={async () => {
+                  Auth.signOut();
+                }}
+              >
+                sign out
+              </button>
+            </p>{" "}
+          </span>
+        </div>
+      )}
       <div
         style={{
           display: "flex",
@@ -148,7 +176,6 @@ function App() {
           </p>
         </div>
       </div>
-
       {items.length > 0 &&
         items.map((item) => {
           return (
@@ -179,4 +206,4 @@ function App() {
     </div>
   );
 }
-export default App;
+export default withAuthenticator(App);

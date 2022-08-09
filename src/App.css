@@ -3,11 +3,14 @@
   100% { opacity: 1; }
 }
 
-@keyframes fadeOut {
-  0% { opacity: 1; }
-  100% { opacity: 0; }
-}
-
 .fade-in { animation: fadeIn 2s; }
 
-.fade-out { animation: fadeOut 2s; }
+
+.linker {
+  background: none!important;
+  border: none;
+  padding: 0!important;
+  color: #069;
+  text-decoration: underline;
+  cursor: pointer;
+}
