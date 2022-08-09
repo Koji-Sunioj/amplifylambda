@@ -7,6 +7,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [message, setMessage] = useState("");
   const myAPI = "api1125d023";
   const path = "/items";
 
@@ -49,6 +50,7 @@ function App() {
     await API.put(myAPI, path, init)
       .then((response) => {
         getAllItems();
+        setMessage(response.message);
       })
       .catch((error) => {
         console.log("error");
@@ -60,6 +62,7 @@ function App() {
     await API.del(myAPI, path, { body: { id: id } })
       .then((response) => {
         getAllItems();
+        setMessage(response.message);
       })
       .catch((error) => {
         console.log("error");
@@ -68,46 +71,56 @@ function App() {
 
   return (
     <div>
-      <form
-        type="submit"
-        style={{ border: "1px solid black", padding: "20px" }}
-        onSubmit={addItem}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          border: "1px solid black",
+          padding: "20px",
+          flex: "1",
+        }}
       >
-        <h3>add a new item</h3>
-        <span
-          style={{
-            display: "flex",
-            justifyContent: "space-around",
-            flexDirection: "column",
-          }}
-        >
-          <div>
-            <label>name: </label>
-            <input
-              value={name}
-              type="text"
-              onChange={(e) => {
-                setName(e.currentTarget.value);
-              }}
-              name="name"
-            ></input>
-          </div>
-          <div>
-            <label>description: </label>
-            <input
-              value={description}
-              type="text"
-              onChange={(e) => {
-                setDescription(e.currentTarget.value);
-              }}
-              name="description"
-            ></input>
-          </div>
-        </span>
-        <button disabled={name.length === 0 || description.length === 0}>
-          Go
-        </button>
-      </form>
+        <form type="submit" onSubmit={addItem} style={{ width: "50%" }}>
+          <h3>add a new item</h3>
+          <span
+            style={{
+              display: "flex",
+              justifyContent: "space-around",
+              flexDirection: "column",
+            }}
+          >
+            <div>
+              <label>name: </label>
+              <input
+                value={name}
+                type="text"
+                onChange={(e) => {
+                  setName(e.currentTarget.value);
+                }}
+                name="name"
+              ></input>
+            </div>
+            <div>
+              <label>description: </label>
+              <input
+                value={description}
+                type="text"
+                onChange={(e) => {
+                  setDescription(e.currentTarget.value);
+                }}
+                name="description"
+              ></input>
+            </div>
+          </span>
+          <button disabled={name.length === 0 || description.length === 0}>
+            Go
+          </button>
+        </form>
+        <div style={{ width: "50%", textAlign: "center", top: "50%" }}>
+          <p>{message}</p>
+        </div>
+      </div>
+
       {items.length > 0 &&
         items.map((item) => {
           return (
